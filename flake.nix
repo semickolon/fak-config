@@ -24,7 +24,12 @@
             hash = "sha256-Ju2DBv3R4O48o8Fk/AFXOBIsvGMK9hJ8Ogxk47f7gcU=";
           };
         };
+        fak = pkgs.writeShellScriptBin "fak" ''
+          #!/usr/bin/env sh
+          python fak.py $@
+        '';
         packages = with pkgs; [
+          fak
           sdcc
           pkgs-unstable.nickel
           pkgs-unstable.nls
@@ -33,9 +38,6 @@
           ninja
           python311
         ];
-        shellHook = ''
-          alias fak="python fak.py"
-        '';
       in
       {
         devShells = {
