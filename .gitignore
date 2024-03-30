@@ -1,0 +1,4 @@
+.vscode/
+.fak_cache/
+build/
+subprojects/fak/
