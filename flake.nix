@@ -26,11 +26,17 @@
           };
         };
         nickel = inputs.nickel.packages.${system}.default;
-        commands = [];
+        commands = [
+          {
+            help = "alias for `python fak.py`";
+            name = "fak";
+            command = "python $PRJ_ROOT/fak.py $@";
+          }
+        ];
         contents = with pkgs; [
           sdcc
-          nickel
           topiary
+          nickel
           meson
           ninja
           python311

@@ -10,6 +10,7 @@ BUILD_DIR = 'build'
 FAK_CACHE_DIR = '.fak_cache'
 EVAL_NCL_PATH = FAK_CACHE_DIR + '/eval.ncl'
 
+
 def check(proc):
     if proc.returncode != 0:
         sys.exit(proc.stderr)
@@ -99,23 +100,27 @@ def init():
         check(subprocess.run(['meson', 'setup', BUILD_DIR], check=True))
 
 
-parser = argparse.ArgumentParser()
-subparsers = parser.add_subparsers(
-    description='valid subcommands', 
-    required=True,
-    dest='subcmd'
-)
+def parse_args():
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(
+        description='valid subcommands', 
+        required=True,
+        dest='subcmd'
+    )
 
-subcmd_clean = subparsers.add_parser('clean')
-subcmd_compile = subparsers.add_parser('compile')
-subcmd_flash = subparsers.add_parser('flash', aliases=['flash_c', 'flash_central'])
-subcmd_flash_p = subparsers.add_parser('flash_p', aliases=['flash_peripheral'])
+    subcmd_clean = subparsers.add_parser('clean')
+    subcmd_compile = subparsers.add_parser('compile')
+    subcmd_flash = subparsers.add_parser('flash', aliases=['flash_c', 'flash_central'])
+    subcmd_flash_p = subparsers.add_parser('flash_p', aliases=['flash_peripheral'])
 
-for subcmd in [subcmd_compile, subcmd_flash, subcmd_flash_p]:
-    subcmd.add_argument('-kb', '--keyboard', type=str, required=True)
-    subcmd.add_argument('-km', '--keymap', type=str, default='default')
+    for subcmd in [subcmd_compile, subcmd_flash, subcmd_flash_p]:
+        subcmd.add_argument('-kb', '--keyboard', type=str, required=True)
+        subcmd.add_argument('-km', '--keymap', type=str, default='default')
 
-args = parser.parse_args()
+    return parser.parse_args()
+
+
+args = parse_args()
 
 if args.subcmd == 'clean':
     clean()
