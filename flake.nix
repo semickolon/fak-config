@@ -4,16 +4,14 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     naersk.url = "github:nix-community/naersk";
-    parts.url = "github:hercules-ci/flake-parts";
-    devshell.url = "github:numtide/devshell";
     nickel.url = "github:tweag/nickel/1.4.1";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = inputs:
-    inputs.parts.lib.mkFlake { inherit inputs; } {
-      imports = [inputs.devshell.flakeModule];
-      systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
-      perSystem = { config, pkgs, system, ... }: let 
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
         naersk = pkgs.callPackage inputs.naersk {};
         wchisp = naersk.buildPackage rec {
           pname = "wchisp";
@@ -26,32 +24,19 @@
           };
         };
         nickel = inputs.nickel.packages.${system}.default;
-        commands = [
-          {
-            help = "alias for `python fak.py`";
-            name = "fak";
-            command = "python $PRJ_ROOT/fak.py $@";
-          }
-        ];
-        contents = with pkgs; [
+        packages = with pkgs; [
           sdcc
           topiary
           nickel
           meson
           ninja
           python311
-          # meson checks for C compilers to work. It doesn't count SDCC.
-          # Even though we don't use it, here we add gcc just to satisfy meson.
-          gcc
         ];
-      in {
-        packages.container = pkgs.dockerTools.buildImage {
-          name = "fak-devenv";
-          tag = "latest";
-          inherit contents;
+      in
+      {
+        devShells.${system} = {
+          default = pkgs.mkShell { inherit packages; };
         };
-        devshells.default = { inherit commands; devshell = { packages = contents; }; };
-        devshells.full = { inherit commands; devshell = { packages = contents ++ [wchisp]; }; };
-      };
-    };
+      }
+    );
 }
