@@ -86,6 +86,10 @@ def evaluate(keyboard_name, keymap_name):
     return open(json_path, 'r')
 
 
+def update():
+    check(subprocess.run(['meson', 'subprojects', 'update'], check=True))
+
+
 def clean():
     for d in [FAK_CACHE_DIR, BUILD_DIR]:
         if os.path.isdir(d):
@@ -109,6 +113,7 @@ def parse_args():
     )
 
     subcmd_clean = subparsers.add_parser('clean')
+    subcmd_compile = subparsers.add_parser('update')
     subcmd_compile = subparsers.add_parser('compile')
     subcmd_flash = subparsers.add_parser('flash', aliases=['flash_c', 'flash_central'])
     subcmd_flash_p = subparsers.add_parser('flash_p', aliases=['flash_peripheral'])
@@ -124,6 +129,9 @@ args = parse_args()
 
 if args.subcmd == 'clean':
     clean()
+elif args.subcmd == 'update':
+    init()
+    update()
 else:
     init()
     fak_py = ['python', 'subprojects/fak/fak.py']
@@ -134,3 +142,12 @@ else:
     ))
     
     check(subprocess.run(fak_py + [args.subcmd]))
+
+    if args.subcmd == 'compile':
+        for side in ['central', 'peripheral']:
+            src = f'subprojects/fak/build/{side}.ihx'
+            dst = f'.fak_cache/{args.keyboard}.{args.keymap}.{side}.ihx'
+
+            if os.path.isfile(src):
+                shutil.copyfile(src, dst)
+                print(f'Firmware copied to: {dst}')

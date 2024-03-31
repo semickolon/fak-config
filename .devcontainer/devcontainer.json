@@ -8,17 +8,17 @@
     "remoteUser": "vscode",
     "customizations": {
         "vscode": {
-        "extensions": [
-            "Tweag.vscode-nickel"
-        ],
-        "settings": {
-            "terminal.integrated.defaultProfile.linux": "zsh",
-            "terminal.integrated.profiles.linux": {
-            "zsh": {
-                "path": "/home/vscode/.nix-profile/bin/zsh"
+            "extensions": [
+                "Tweag.vscode-nickel"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.profiles.linux": {
+                    "zsh": {
+                        "path": "/home/vscode/.nix-profile/bin/zsh"
+                    }
+                }
             }
-            }
-        }
         }
     }
 }

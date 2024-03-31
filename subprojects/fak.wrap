@@ -1,4 +1,4 @@
 [wrap-git]
 url = https://github.com/semickolon/fak.git
-revision = head
+revision = e897c2da377263e99bf7d2c89a11492279828825
 depth = 1
