@@ -12,10 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: DeterminateSystems/nix-installer-action@main
-      - id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - run: nix develop --command fak compile_all
       - uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.vars.outputs.sha_short }}
+          tag: latest
           artifacts: ".fak_cache/*.ihx"
+          allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
+          makeLatest: true
