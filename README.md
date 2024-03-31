@@ -29,6 +29,8 @@ The only thing that won't work from a remote setup is, of course, flashing. You'
 
 Alternatively, you can push your changes, wait a bit, then you will find all ready-to-flash `.ihx` files in the latest release. From there, download the ones you need, then flash with `wchisp`.
 
+If, for whatever reason, you're getting `fak: command not found`, enter `nix develop` then you should be back up.
+
 ### Nix
 
 If you have Nix installed on your system, a Nix flake is provided. There are two dev shells: `default` and `full`. The only difference between the two is that `full` comes with `wchisp`, the flashing utility, so you will most likely want to use `full`. `default` dev shell is what the dev container uses, because it's impossible to flash remotely and it wouldn't make sense to have `wchisp` there.

@@ -140,7 +140,6 @@ def clean():
 
 
 def init():
-    os.chdir(sys.path[0])
     os.makedirs(FAK_CACHE_DIR, exist_ok=True)
 
     if not os.path.isdir(BUILD_DIR):
@@ -156,8 +155,8 @@ def parse_args():
     )
 
     subcmd_clean = subparsers.add_parser('clean')
-    subcmd_compile = subparsers.add_parser('update')
-    subcmd_compile = subparsers.add_parser('compile_all')
+    subcmd_update = subparsers.add_parser('update')
+    subcmd_compile_all = subparsers.add_parser('compile_all')
     subcmd_compile = subparsers.add_parser('compile')
     subcmd_flash = subparsers.add_parser('flash', aliases=['flash_c', 'flash_central'])
     subcmd_flash_p = subparsers.add_parser('flash_p', aliases=['flash_peripheral'])
@@ -169,6 +168,7 @@ def parse_args():
     return parser.parse_args()
 
 
+os.chdir(sys.path[0])
 args = parse_args()
 
 if args.subcmd == 'clean':

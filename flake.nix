@@ -8,7 +8,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { nixpkgs, flake-utils, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -25,8 +25,17 @@
           };
         };
         fak = pkgs.writeShellScriptBin "fak" ''
-          #!/usr/bin/env sh
-          python fak.py $@
+          #!/usr/bin/env bash
+          DIR=$(pwd)
+          while [ ! -z "$DIR" ] && [ ! -f "$DIR/fak.py" ] && [ ! -f "$DIR/meson.build" ]; do
+            DIR="''${DIR%\/*}"
+          done
+
+          if [ -f "$DIR/fak.py" ]; then
+            python "$DIR/fak.py" $@
+          else
+            echo "Error: fak.py not found"
+          fi
         '';
         packages = with pkgs; [
           fak
