@@ -101,7 +101,7 @@ def update():
 
 
 def clean():
-    for d in [FAK_CACHE_DIR, BUILD_DIR]:
+    for d in [FAK_CACHE_DIR, BUILD_DIR, 'subprojects/fak']:
         if os.path.isdir(d):
             shutil.rmtree(d)
 
