@@ -7,10 +7,15 @@ jobs:
   compile:
     name: Compile all keymaps
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: DeterminateSystems/nix-installer-action@main
+      - id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - run: nix develop --command fak compile_all
       - uses: ncipollo/release-action@v1
         with:
+          tag: ${{ steps.vars.outputs.sha_short }}
           artifacts: ".fak_cache/*.ihx"
