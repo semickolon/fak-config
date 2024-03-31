@@ -1,0 +1,16 @@
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  compile:
+    name: Compile all keymaps
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: nix develop --command fak compile_all
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: ".fak_cache/*.ihx"

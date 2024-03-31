@@ -5,6 +5,7 @@ import sys
 import shutil
 import subprocess
 import argparse
+import glob
 
 BUILD_DIR = 'build'
 FAK_CACHE_DIR = '.fak_cache'
@@ -96,6 +97,38 @@ def evaluate(keyboard_name, keymap_name):
     return open(json_path, 'r')
 
 
+def fak_py(subcmd, keyboard_name, keymap_name):
+    py = ['python', 'subprojects/fak/fak.py']
+
+    check(subprocess.run(
+        py + ['load_managed_eval'],
+        stdin=evaluate(keyboard_name, keymap_name),
+    ))
+    
+    check(subprocess.run(py + [subcmd]))
+
+    if subcmd == 'compile':
+        for side in ['central', 'peripheral']:
+            src = f'subprojects/fak/build/{side}.ihx'
+            dst = f'.fak_cache/{keyboard_name}.{keymap_name}.{side}.ihx'
+
+            if os.path.isfile(src):
+                shutil.copyfile(src, dst)
+                print(f'Firmware copied to: {dst}')
+
+
+def compile_all():
+    for kb_ncl in glob.glob('keyboards/*/keyboard.ncl'):
+        keyboard_name = os.path.basename(os.path.dirname(kb_ncl))
+
+        for km_ncl in glob.glob(f'keyboards/{keyboard_name}/keymaps/*.ncl'):
+            keymap_name = os.path.basename(km_ncl).removesuffix('.ncl')
+
+            print('-' * 32)
+            print(f'Compiling {keyboard_name}.{keymap_name}...')
+            fak_py('compile', keyboard_name, keymap_name)
+
+
 def update():
     check(subprocess.run(['meson', 'subprojects', 'update'], check=True))
 
@@ -124,6 +157,7 @@ def parse_args():
 
     subcmd_clean = subparsers.add_parser('clean')
     subcmd_compile = subparsers.add_parser('update')
+    subcmd_compile = subparsers.add_parser('compile_all')
     subcmd_compile = subparsers.add_parser('compile')
     subcmd_flash = subparsers.add_parser('flash', aliases=['flash_c', 'flash_central'])
     subcmd_flash_p = subparsers.add_parser('flash_p', aliases=['flash_peripheral'])
@@ -139,25 +173,12 @@ args = parse_args()
 
 if args.subcmd == 'clean':
     clean()
-elif args.subcmd == 'update':
-    init()
-    update()
 else:
     init()
-    fak_py = ['python', 'subprojects/fak/fak.py']
 
-    check(subprocess.run(
-        fak_py + ['load_managed_eval'],
-        stdin=evaluate(args.keyboard, args.keymap),
-    ))
-    
-    check(subprocess.run(fak_py + [args.subcmd]))
-
-    if args.subcmd == 'compile':
-        for side in ['central', 'peripheral']:
-            src = f'subprojects/fak/build/{side}.ihx'
-            dst = f'.fak_cache/{args.keyboard}.{args.keymap}.{side}.ihx'
-
-            if os.path.isfile(src):
-                shutil.copyfile(src, dst)
-                print(f'Firmware copied to: {dst}')
+    if args.subcmd == 'update':
+        update()
+    elif args.subcmd == 'compile_all':
+        compile_all()
+    else:
+        fak_py(args.subcmd, args.keyboard, args.keymap)
