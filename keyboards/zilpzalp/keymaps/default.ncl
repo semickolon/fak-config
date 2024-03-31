@@ -1,8 +1,8 @@
 let { tap, hold, td, combo, .. } = import "fak/keycode.ncl" in
 let util = import "fak/util_functions.ncl" in
 
-let config = import "lib/config.ncl" in
-let layout = (import "lib/layouts.ncl")."%{config.layout}" in
+let config = import "shared/config.ncl" in
+let layout = (import "shared/layouts.ncl")."%{config.layout}" in
 
 let ki = {
   hp = { decision = 'hold, trigger_on = 'press },

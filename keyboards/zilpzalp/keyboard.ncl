@@ -1,5 +1,6 @@
 let { ColToRowKey, .. } = import "fak/keyboard.ncl" in
 let { CH552T, .. } = import "fak/mcus.ncl" in
+let { zilpzalp_usb_pid, .. } = import "lib/example.ncl" in
 
 {
   mcu = CH552T,
@@ -9,7 +10,7 @@ let { CH552T, .. } = import "fak/mcus.ncl" in
   },
   usb_dev = {
     vendor_id = 43962, # 0xABBA
-    product_id = 1,
+    product_id = zilpzalp_usb_pid,
     product_ver = 256, # 0x0100
   },
   keys =

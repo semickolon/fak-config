@@ -35,9 +35,19 @@ def compute_hash_ncl(file_path):
 
             if import_path.startswith('fak/'):
                 if os.path.isfile(path):
-                    sys.exit('.ncl files in any directory named "fak" are ambiguous and must not exist.')
+                    sys.exit('Error: .ncl files in any directory named "fak" are ambiguous and must not exist.')
                 else:
                     continue
+            
+            if import_path.startswith('lib/'):
+                shared_lib_path = os.path.join('shared', import_path)
+                is_shared = os.path.isfile(shared_lib_path)
+                is_relative = os.path.isfile(path)
+
+                if is_shared and is_relative:
+                    sys.exit(f'Error: Cannot resolve ambiguity of "{import_path}". Exists in "{shared_lib_path}" and "{path}"')
+                elif is_shared:
+                    path = shared_lib_path
                 
             h.update(compute_hash_ncl(path).encode('utf-8'))
         
@@ -72,7 +82,7 @@ def evaluate(keyboard_name, keymap_name):
     print("Evaluating Nickel files (managed)...")
 
     evaluation = check(subprocess.run(
-        ['nickel', 'export', '-Isubprojects/fak/ncl', f'-Ikeyboards/{keyboard_name}', EVAL_NCL_PATH],
+        ['nickel', 'export', '-Isubprojects/fak/ncl', '-Ishared', f'-Ikeyboards/{keyboard_name}', EVAL_NCL_PATH],
         capture_output=True,
         text=True,
     ))
