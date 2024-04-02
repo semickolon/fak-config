@@ -1,5 +1,6 @@
 on:
   pull_request:
+  workflow_dispatch:
   push:
     branches: [main]
 
@@ -12,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: DeterminateSystems/nix-installer-action@main
-      - run: nix develop --command fak compile_all
+      - run: nix develop .#container --command fak compile_all
       - uses: EndBug/latest-tag@latest
       - uses: ncipollo/release-action@v1
         with:
