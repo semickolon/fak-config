@@ -13,7 +13,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
         pkgs-unstable = import inputs.nixpkgs-unstable { inherit system; };
-        naersk = pkgs.callPackage inputs.naersk {};
+        naersk = pkgs.callPackage inputs.naersk { };
         wchisp = naersk.buildPackage rec {
           pname = "wchisp";
           version = "0.3-git";
@@ -47,12 +47,10 @@
           ninja
           python311
         ];
-      in
-      {
+      in {
         devShells = {
-          default = pkgs.mkShell { inherit packages; };
-          full = pkgs.mkShell { packages = packages ++ [wchisp]; };
+          default = pkgs.mkShell { packages = packages ++ [ wchisp ]; };
+          container = pkgs.mkShell { inherit packages; };
         };
-      }
-    );
+      });
 }
