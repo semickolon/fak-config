@@ -33,10 +33,10 @@ If, for whatever reason, you're getting `fak: command not found`, enter `nix dev
 
 ### Nix
 
-If you have Nix installed on your system, a Nix flake is provided. There are two dev shells: `default` and `full`. The only difference between the two is that `full` comes with `wchisp`, the flashing utility, so you will most likely want to use `full`. `default` dev shell is what the dev container uses, because it's impossible to flash remotely and it wouldn't make sense to have `wchisp` there.
+If you have Nix installed on your system, a Nix flake is provided.
 
 1. Fork and clone this repo
-1. `nix develop .#full` or `nix develop`
+1. `nix develop` (or if you have `direnv`, just `direnv allow`)
 
 ### Manual setup
 
@@ -52,7 +52,7 @@ With manual setup, the `fak` command isn't included. Use `python fak.py` in plac
 
 ## Commands
 
-Now that you have your development environment set up and ready, compiling is as easy as `fak compile -kb [keyboard] -km [keymap]`. You may omit `-km [keymap]` if keymap is "default" (e.g., `fak compile -km [keyboard]`). This will also print the path(s) where it put the firmware files in, which is helpful in a remote setup.
+Now that you have your development environment set up and ready, compiling is as easy as `fak compile -kb [keyboard] -km [keymap]`. You may omit `-km [keymap]` if keymap is "default" (e.g., `fak compile -kb [keyboard]`). This will also print the path(s) where it put the firmware files in, which is helpful in a remote setup.
 
 If you're using a local setup, you can flash directly with `fak flash -kb [keyboard] -km [keymap]`. Then if you have a split, flash the peripheral side with `fak flash_p -kb [keyboard] -km [keymap]`. Likewise, you may omit `-km [keymap]` if keymap is "default".
 
