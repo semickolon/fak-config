@@ -49,7 +49,7 @@ let shared_layers = {
 } in
 
 let both_side_combos = [
-  [kc.CAPS, 0, 7],
+  [kc.CAPS, 1, 6],
   # Caps word combo here once supported
    #[CW, 10, 13],
 ] in
@@ -61,21 +61,21 @@ let both_side_combos = [
   qwerty = {
     base_layout = "WERTYUIOSDFGHJKLAXCVM,.P",
     thumbs = [kc.ESC, kc.SPC, kc.N, kc.ENT],
-    #kustom_keys = [kc.ESC, kc.SPC, kc.N, kc.ENT],
+    kustom_keys = [kc.ESC, kc.SPC, kc.N, kc.ENT],
     
-    custom_keys = [
-        { index = 0, binding = tap.reg.kc.ESC },  # W -> ESC
-        { index = 7, binding = tap.reg.kc.TAB },  # O -> TAB
-        { index = 9, binding = tap.reg.kc.BACKSPACE },  # S -> BACKSPACE
-        { index = 16, binding = tap.reg.kc.ENTER }  # L -> ENTER
-    ],
+    #kustom_keys = [
+    #    { index = 0, binding = tap.reg.kc.ESC },  # W -> ESC
+    #    { index = 7, binding = tap.reg.kc.TAB },  # O -> TAB
+    #    { index = 9, binding = tap.reg.kc.BACKSPACE },  # S -> BACKSPACE
+    #    { index = 16, binding = tap.reg.kc.ENTER }  # L -> ENTER
+    #],
 
 
     
 
     combos = [
       # Left
-      [kc.Q,    0,  1],
+      [kc.Q,    1,  2],
       [kc.Z,    17, 18], [kc.B,    18, 19],
       # Right
                                             [kc.QUOT, 5, 6],   [kc.SCLN, 6,  7],
