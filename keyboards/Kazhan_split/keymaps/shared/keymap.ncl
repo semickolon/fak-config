@@ -51,7 +51,7 @@ let make_hrm = fun key_idx =>
 
   let hrm_key_indices = [
     25, 8,  9,  10, 11,
-    30, 13, 14, 15, 23,
+    30, 13, 14, 15, 12,
   ] in
 
   let htb_hrm_base = {
