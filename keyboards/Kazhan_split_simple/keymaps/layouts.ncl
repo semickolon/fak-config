@@ -56,9 +56,16 @@ let both_side_combos = [
 
 {
   qwerty = {
-    base_layout = "QWERTYUIOQQSDFGHJKLAQXCVM,.P",
+    base_layout = "WERTYUIOSDFGHJKLAXCVM,.P",
     thumbs = [kc.ESC, kc.SPC, kc.N, kc.ENT],
-
+    #kustom_keys = [kc.ESC, kc.SPC, kc.N, kc.ENT],
+    
+    kustom_keys = [
+        { index = 0, binding = tap.reg.kc.ESC },  # W -> ESC
+        { index = 9, binding = tap.reg.kc.TAB },  # O -> TAB
+        { index = 10, binding = tap.reg.kc.BACKSPACE },  # S -> BACKSPACE
+        { index = 19, binding = tap.reg.kc.ENTER }  # L -> ENTER
+    ],
     combos = [
       # Left
       [kc.Q,    1,  2],

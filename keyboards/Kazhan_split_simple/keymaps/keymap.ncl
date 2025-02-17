@@ -99,11 +99,17 @@ let layer_default =
   let base_keycodes = layout.base_layout
     |> std.string.characters
     |> util.array.enumerate
-
+    |> std.array.filter (fun x =>
+        let index = x.index in
+        !(std.array.elem index excluded_indexes)
+    )
     |> std.array.map (fun { index, value } => tap.reg.kc."%{value}" & make_hrm index)
   in
 
 
+  let my_special_keycodes = kustom_keys
+    |> std.array.map (fun { index, binding } => binding & make_hrm index)
+  in
     
   let thumb_keycodes =
     let htb_thumb = {
@@ -121,7 +127,7 @@ let layer_default =
         & hold.reg.behavior htb_thumb)
   in
   
-  base_keycodes @ thumb_keycodes @ virtual_base 
+  base_keycodes @ thumb_keycodes @ virtual_base @ my_special_keycodes
 in
 
 {
